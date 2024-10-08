@@ -3,7 +3,6 @@ import subprocess
 
 def detect_python_executable():
     try:
-        # Tenta usar python3
         subprocess.check_call(['python3', '--version'])
         return 'python3'
     except subprocess.CalledProcessError:
@@ -12,7 +11,6 @@ def detect_python_executable():
         pass
 
     try:
-        # Tenta usar python
         subprocess.check_call(['python', '--version'])
         return 'python'
     except subprocess.CalledProcessError:
