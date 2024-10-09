@@ -1,12 +1,52 @@
 import ollama
 from utils.files import read_file
+from utils.student import Student
 from services.database import get_db_structure
 import re
 import unidecode
 import streamlit as st
 
 # Configurações da API
-MODEL_NAME = 'codellama' 
+MODEL_NAME = 'codellama'
+PROMPT_TEMPLATE = read_file("app/prompts/prompt_template.txt")
+        
+def process_feedback(question: str, student: Student):
+    """
+    Gera o feedback para o aluno usando IA generativa e atualiza o feedback no objeto Student.
+    
+    Args:
+        question (str): A pergunta que será usada como instrução para o modelo de IA.
+        std (Student): O objeto Student contendo o script do aluno e outros dados.
+        
+    Returns:
+        None: O feedback é salvo diretamente no objeto Student.
+    """
+    try:
+        prompt = PROMPT_TEMPLATE.format(
+            instruction=question,
+            student_script=student.script
+        )
+        
+        response = ollama.generate(
+            model=MODEL_NAME,
+            prompt=prompt,
+        )
+
+        print(response)
+
+        exit()
+
+        feedback = response.get('response')
+
+        if feedback:
+            student.feedback = feedback
+            st.success(f"Feedback gerado para {student.get_name()}")
+        else:
+            st.error("Erro ao gerar o feedback.")
+    
+    except Exception as e:
+        st.error(f"Erro ao processar o feedback: {e}")
+
 
 def generate_query(user_input: str) -> str:
     """
@@ -57,36 +97,3 @@ def generate_query(user_input: str) -> str:
     except Exception as e:
         st.error(f"Erro ao gerar a query: {e}")
         return ""
-    
-def extract_values(response: str):
-    # Usar expressões regulares para capturar os valores
-    query_pattern = re.compile(r"query:\s*(.*?);", re.IGNORECASE)
-    chart_type_pattern = re.compile(r"chart type:\s*(.*?)(?:\s|;|$)", re.IGNORECASE)
-    y_chart_value_pattern = re.compile(r"y value:\s*(.*?)(?:\s|;|$)", re.IGNORECASE)
-    x_chart_value_pattern = re.compile(r"x value:\s*(.*?)(?:\s|;|$)", re.IGNORECASE)
-
-    # Função para retornar None se o valor for "" ou "none"
-    def clean_value(value):
-        value = remove_acentos_e_pontuacao(value.strip())
-        if not value or value.strip().lower() == "none":
-            return None
-        return value
-    
-    # Captura valores ou define como None se não encontrado
-    query_match = query_pattern.search(response)
-    chart_type_match = chart_type_pattern.search(response)
-    y_chart_value_match = y_chart_value_pattern.search(response)
-    x_chart_value_match = x_chart_value_pattern.search(response)
-    
-    # Checa se a busca retornou resultado e usa .group(1) se sim
-    query = query_match.group(1) if query_match else None
-    chart_type = clean_value(chart_type_match.group(1)) if chart_type_match else None
-    y_chart_value = clean_value(y_chart_value_match.group(1)) if y_chart_value_match else None
-    x_chart_value = clean_value(x_chart_value_match.group(1)) if x_chart_value_match else None
-    
-    return query, chart_type, y_chart_value, x_chart_value
-
-def remove_acentos_e_pontuacao(text):
-    text = unidecode.unidecode(text)
-    text = text.translate(str.maketrans('', '', '".;'))
-    return text

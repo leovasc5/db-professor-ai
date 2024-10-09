@@ -2,7 +2,7 @@ import os
 import streamlit as st
 import zipfile
 from interface.layout import render_layout
-from services.ai_generator import generate_query
+from services.ai_generator import process_feedback
 from services.database import execute_query
 from utils.student import Student
 from utils.validators import validate_query
@@ -22,7 +22,7 @@ def main():
                 print(uploaded_file)
 
                 students = extract_students(uploaded_file)
-                process_feedback(question_input, students)
+                create_feedback(question_input, students)
 
 
 
@@ -42,9 +42,12 @@ def extract_students(zip_file):
                     students.append(student)
     return students
 
-def process_feedback(question_input, students):
-    pass
-            
+def create_feedback(question_input, students):
+    for student in students:
+        print(student)
+        with st.spinner(f"Corrigindo exercício do aluno {student.get_name()}..."):
+            process_feedback(question_input, student)
+        
 
     # Processa a entrada do usuário
     # if question_input:
