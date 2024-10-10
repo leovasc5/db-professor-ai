@@ -13,6 +13,11 @@ class Student:
             part.capitalize() if part not in conjunctions else part
             for part in name_parts
         ]
+
+        formatted_name = [
+            part.split(".")[0] if "." in part else part
+            for part in formatted_name
+        ]
         
         return " ".join(formatted_name)
     
