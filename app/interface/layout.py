@@ -2,7 +2,7 @@ import streamlit as st
 import zipfile
 
 st.set_page_config(
-        page_title="DB Feedback Bot",
+        page_title="DB Professor AI",
         page_icon="🧊",
         layout="centered",
         initial_sidebar_state="collapsed"
