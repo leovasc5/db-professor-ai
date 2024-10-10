@@ -4,12 +4,14 @@ import google.generativeai as genai
 from dotenv import load_dotenv
 from utils.student import Student
 import time
+from utils import files
 
 load_dotenv()
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 INTERVAL_SECONDS_PER_REQUEST = 60 / int(os.getenv("RPM"))
 SECURITY_WAIT = int(os.getenv("SECURITY_WAIT"))
 MODEL_NAME = os.getenv("MODEL_NAME")
+PROMPT=files.read_file("app/prompts/prompt_template.txt")
 
 generation_config = {
   "temperature": 1.5,
@@ -22,7 +24,7 @@ generation_config = {
 model = genai.GenerativeModel(
   model_name=MODEL_NAME,
   generation_config=generation_config,
-  system_instruction="Você é um assistente de banco de dados especializado em consultas de linguagem natural. Você receberá uma lista de exercícios de banco de dados MySQL e um script de texto dos comandos que um determinado aluno executou. Você terá de responder destacando os principais erros do exercício, pontos de atenção e melhorias, como se fosse um professor corrigindo a lição de um aluno. Você deve responder no seguinte formato: Erros na interpretação do exercício: Liste onde o aluno fez códigos que não correspondem ao que foi solicitado no exercício.",
+  system_instruction=PROMPT
 )
 
 chat_session = model.start_chat(
