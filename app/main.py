@@ -14,12 +14,11 @@ def main():
         question_input, uploaded_file = response
 
         if question_input and uploaded_file:
-            with st.spinner('Gerando query...'):
-                print(question_input)
-                print(uploaded_file)
-
+            with st.spinner('Analisando conteúdo...'):
                 students = extract_students(uploaded_file)
                 create_feedback(question_input, students)
+
+                padding(3)
 
                 st.success("Feedbacks gerados com sucesso! Você pode baixar um PDF com os feedbacks na parte superior direita da tela.")
 
@@ -40,9 +39,13 @@ def extract_students(zip_file):
 
 def create_feedback(question_input, students):
     for student in students:
-        print(student)
         with st.spinner(f"Corrigindo exercício do aluno {student.get_name()}..."):
             process_feedback(question_input, student)
-    
+            padding(2)
+
+def padding(size: int):
+    for _ in range(size):
+        st.write(" ")
+
 if __name__ == "__main__":
     main()

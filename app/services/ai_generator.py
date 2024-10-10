@@ -3,9 +3,11 @@ import streamlit as st
 import google.generativeai as genai
 from dotenv import load_dotenv
 from utils.student import Student
+import time
 
 load_dotenv()
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+INTERVAL_SECONDS_PER_REQUEST = 60 / int(os.getenv("RPM"))
 
 generation_config = {
   "temperature": 1.5,
@@ -26,7 +28,6 @@ chat_session = model.start_chat(
   ]
 )
 
-        
 def process_feedback(question: str, student: Student):
     """
     Generate the feedback for the student using generative AI and update the feedback in the Student object.
@@ -39,19 +40,23 @@ def process_feedback(question: str, student: Student):
         None: The feedback is setted in the Student object.
     """
     try:
+        start_at = time.time()
         response = chat_session.send_message(question + "\n" + student.script)
         feedback = response.text
+        end_at = time.time()
 
-        print(feedback)
-
+        wait(start_at, end_at)
+        
         if feedback:
             student.feedback = feedback
-            st.success(f"Feedback gerado para {student.get_name()}")
-
-            st.write(f"Feedback para {student.get_name()}:")
+            st.success(student.get_name())
             st.write(feedback)
         else:
             st.error("Erro ao gerar o feedback.")
     
     except Exception as e:
         st.error(f"Erro ao processar o feedback: {e}")
+
+def wait(start_at, end_at):
+    if end_at - start_at < INTERVAL_SECONDS_PER_REQUEST:
+      time.sleep(INTERVAL_SECONDS_PER_REQUEST - (end_at - start_at))
