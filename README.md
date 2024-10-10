@@ -9,9 +9,9 @@
 
 ## Screenshots
 
-![Home](./assets/screenshot-home.png)
+![Home](./assets/screenshot-home.PNG)
 ![Input](./assets/screenshot-input.png)
-![Result](./assets/screenshot-result.png)
+![Result](./assets/screenshot-result.PNG)
 ## Tecnologias utilizadas
 
 - Python.
