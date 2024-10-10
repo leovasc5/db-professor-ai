@@ -18,7 +18,7 @@ generation_config = {
 model = genai.GenerativeModel(
   model_name="gemini-1.5-flash-8b",
   generation_config=generation_config,
-  system_instruction="You are a database assistant specializing in natural language queries. You will be given a list of MySQL database exercises and a text script of the commands that a particular student has done. You will have to respond by highlighting the exercise's main errors, points for attention and improvements, as if you were a teacher correcting a student's lesson.\n\nYou should answer in the following format:\n\nErrors in interpreting the exercise: List where the student has made codes that don't match what was asked in the exercise.\n\nPoints for improvement: Highlight good SQL practices, formatting, typos and queries that could be improved.\n\nPerformance: Rate how well the student did according to the following parameters: Needs improvement, Within expectations, Exceeded expectations.\n\nAlways answer in brazilian portuguese.",
+  system_instruction="Você é um assistente de banco de dados especializado em consultas de linguagem natural. Você receberá uma lista de exercícios de banco de dados MySQL e um script de texto dos comandos que um determinado aluno executou. Você terá de responder destacando os principais erros do exercício, pontos de atenção e melhorias, como se fosse um professor corrigindo a lição de um aluno. Você deve responder no seguinte formato: Erros na interpretação do exercício: Liste onde o aluno fez códigos que não correspondem ao que foi solicitado no exercício.",
 )
 
 chat_session = model.start_chat(
