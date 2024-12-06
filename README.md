@@ -2,11 +2,6 @@
 
 **DB Professor AI** tem como objetivo fornecer feedbacks automatizados e detalhados para alunos que enviam exercícios de banco de dados MySQL. Utilizando Python, a API do Google Gemini e a biblioteca Streamlit, o sistema é capaz de analisar scripts SQL contidos em arquivos ZIP, garantindo um suporte técnico eficiente e direto. Tendo como objetivo aprimorar a rapidez e eficiência de feedback aos alunos.
 
-## Funcionalidades
-
-- Interação em Linguagem Natural: O sistema permite que os usuários façam perguntas ou instruções em linguagem natural, que são automaticamente convertidas em consultas SQL.
-- Consultas Otimizadas: A IA gera consultas SQL otimizadas com base nas instruções fornecidas, facilitando o acesso aos dados sem a necessidade de profundo conhecimento técnico.
-
 ## Screenshots
 
 ![Home](./assets/screenshot-home.PNG)
